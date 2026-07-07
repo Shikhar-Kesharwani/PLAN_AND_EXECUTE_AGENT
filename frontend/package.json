@@ -1,0 +1,32 @@
+{
+  "name": "plan-execute-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@tailwindcss/typography": "^0.5.20",
+    "@vitejs/plugin-react": "^6.0.3",
+    "framer-motion": "^12.42.2",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.25",
+    "lucide-react": "^1.23.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "tailwindcss": "^3.4.17",
+    "three": "^0.185.1",
+    "vite": "^8.1.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.2",
+    "postcss": "^8.5.16"
+  }
+}

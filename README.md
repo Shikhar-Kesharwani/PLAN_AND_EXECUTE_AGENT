@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- Animated Banner -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=220&section=header&text=Plan-and-Execute%20AI&fontSize=60&fontColor=fff&animation=twinkling&fontAlignY=38&desc=The%20AI%20That%20Plans%2C%20Executes%20%26%20Adapts&descAlignY=58&descSize=18" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=220&section=header&text=Plan-and-Execute%20AI&fontSize=60&fontColor=fff&animation=twinkling&fontAlignY=38&desc=The%20AI%20That%20Plans%2C%20Executes%20and%20Adapts&descAlignY=58&descSize=18" width="100%"/>
 
 <!-- Typing Animation -->
 ![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=800&size=24&duration=2500&pause=800&color=8B5CF6&background=00000000&center=true&vCenter=true&multiline=true&repeat=true&width=800&height=100&lines=🧠+Plan-and-Execute+AI+Agent;⚡+LangGraph+%7C+Multi-Agent+%7C+React)
@@ -365,7 +365,7 @@ See [`LICENSE`](LICENSE) for full text.
 
 <br/>
 
-<p>Made with ❤️ by <a href="https://github.com/AyushGU12">Ayush</a></p>
+<p>Made with ❤️ by <a href="https://github.com/AyushGU12">Shikhar</a></p>
 <p>⭐ Star this repo if it helped you!</p>
 
 <!-- Footer wave -->

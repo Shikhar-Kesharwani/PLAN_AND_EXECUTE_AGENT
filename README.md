@@ -11,13 +11,13 @@
 ![Forks](https://img.shields.io/github/forks/AyushGU12/PLAN_AND_EXECUTE_AGENT?style=for-the-badge&logo=github&color=ec4899&labelColor=0d1117)
 ![Issues](https://img.shields.io/github/issues/AyushGU12/PLAN_AND_EXECUTE_AGENT?style=for-the-badge&logo=github&color=06b6d4&labelColor=0d1117)
 ![License](https://img.shields.io/github/license/AyushGU12/PLAN_AND_EXECUTE_AGENT?style=for-the-badge&color=10b981&labelColor=0d1117)
+![Visitors](https://komarev.com/ghpvc/?username=AyushGU12-PLAN-AND-EXECUTE-AGENT&style=for-the-badge&color=8b5cf6&label=REPO+VIEWS&labelColor=0d1117)
 
 <!-- Tech Stack Badges -->
 ![LangGraph](https://img.shields.io/badge/LangGraph-0.1.0-8b5cf6?style=for-the-badge&logo=python&logoColor=white&labelColor=0d1117)
 ![Groq](https://img.shields.io/badge/Groq-LLaMA3--70B-ec4899?style=for-the-badge&logo=meta&logoColor=white&labelColor=0d1117)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-06b6d4?style=for-the-badge&logo=fastapi&logoColor=white&labelColor=0d1117)
 ![React](https://img.shields.io/badge/React-18.0-61dafb?style=for-the-badge&logo=react&logoColor=white&labelColor=0d1117)
-![Three.js](https://img.shields.io/badge/Three.js-3D+UI-f97316?style=for-the-badge&logo=threedotjs&logoColor=white&labelColor=0d1117)
 
 <br/>
 
@@ -37,10 +37,12 @@
 
 - [🎯 What Is This](#-what-is-this)
 - [🧠 How It Works](#-how-it-works)
+- [🏗️ System Architecture](#️-system-architecture)
 - [⚡ Features](#-features)
 - [🛠️ Tech Stack](#️-tech-stack)
 - [📁 Project Structure](#-project-structure)
 - [🚀 Quick Start](#-quick-start)
+- [📡 API Reference](#-api-reference)
 - [🤝 Contributing](#-contributing)
 - [📜 License](#-license)
 
@@ -125,6 +127,59 @@ graph TD
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png" width="100%"/>
 
+## 🏗️ System Architecture
+
+### Agent State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> Planner : User Query
+    Planner --> Executor : Plan created
+
+    Executor --> Replanner : Check progress
+    Replanner --> Executor : More steps
+    Replanner --> FinalAnswer : Objective met
+    Replanner --> Planner : Replan needed
+
+    FinalAnswer --> [*]
+```
+
+### Full System Overview
+
+```mermaid
+graph TB
+    subgraph Client["🖥️ Client Layer"]
+        WEB[🌐 React + Vite]
+        UI[✨ 3D UI / Framer Motion]
+    end
+
+    subgraph Gateway["🚪 API Gateway"]
+        API[⚡ FastAPI]
+        CORS[🔐 CORS]
+    end
+
+    subgraph AgentCore["🤖 Agent Core — LangGraph"]
+        PL[🧠 Planner]
+        EX[⚙️ Executor]
+        RP[🔄 Replanner]
+    end
+
+    subgraph LLM["🧠 LLM Layer"]
+        GROQ[⚡ Groq API<br/>LLaMA3]
+    end
+
+    Client --> Gateway
+    Gateway --> AgentCore
+    AgentCore --> LLM
+
+    style Client fill:#1e1b4b,color:#fff,stroke:#8b5cf6
+    style Gateway fill:#1a1a2e,color:#fff,stroke:#ec4899
+    style AgentCore fill:#0f3460,color:#fff,stroke:#06b6d4
+    style LLM fill:#2d1b4e,color:#fff,stroke:#a855f7
+```
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png" width="100%"/>
+
 ## ⚡ Features
 
 ### Core AI Features
@@ -149,7 +204,7 @@ graph TD
 <div align="center">
 
 ### Frontend
-![React](https://skillicons.dev/icons?i=react,tailwind,threejs,vite&theme=dark)
+![React](https://skillicons.dev/icons?i=react,tailwind,vite&theme=dark)
 
 ### Backend
 ![Backend](https://skillicons.dev/icons?i=python,fastapi&theme=dark)
@@ -232,6 +287,35 @@ npm install
 npm run dev
 # The stunning 3D UI will be available at http://localhost:5173
 ```
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/solar.png" width="100%"/>
+
+## 📡 API Reference
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/chat/ask` | Run Plan-Execute agent |
+| `GET`  | `/api/health` | Check API health |
+
+<details>
+<summary>📋 POST /api/chat/ask — Example</summary>
+
+**Request:**
+```json
+{
+  "query": "Compare quicksort and mergesort"
+}
+```
+
+**Response:**
+```json
+{
+  "answer": "## Quicksort vs Mergesort\n\n...",
+  "steps_taken": ["Plan created", "Step 1 done", "Step 2 done"]
+}
+```
+
+</details>
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%"/>
 

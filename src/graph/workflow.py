@@ -1,4 +1,5 @@
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.memory import MemorySaver
 from graph.state import PlanExecuteState
 from graph.nodes import (
     planner_node,
@@ -28,7 +29,8 @@ def should_continue(state: PlanExecuteState) -> str:
 
 def build_plan_execute_graph():
     """
-    Assembles the complete Plan-and-Execute LangGraph.
+    Assembles the complete Plan-and-Execute LangGraph
+    with MemorySaver for conversation history.
     """
     graph = StateGraph(PlanExecuteState)
 
@@ -52,7 +54,7 @@ def build_plan_execute_graph():
         "replanner",
         should_continue,
         {
-            "execute": "executor",   # more steps to run
+            "execute": "executor",    # more steps to run
             "compile": "final_answer" # we are done
         }
     )
@@ -60,7 +62,9 @@ def build_plan_execute_graph():
     # Final answer → END
     graph.add_edge("final_answer", END)
 
-    return graph.compile()
+    # MemorySaver enables conversation history / checkpointing
+    memory = MemorySaver()
+    return graph.compile(checkpointer=memory)
 
 
 # Singleton

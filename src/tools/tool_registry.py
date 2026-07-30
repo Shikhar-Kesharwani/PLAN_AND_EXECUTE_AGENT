@@ -10,6 +10,29 @@ llm = ChatGroq(
     model=os.getenv("LLM_MODEL", "llama3-70b-8192")
 )
 
+
+# ─────────────────────────────────────────
+# TOOL 0: Live Web Search (NEW)
+# ─────────────────────────────────────────
+@tool
+def web_search(query: str) -> str:
+    """
+    Search the live internet for up-to-date information on any topic.
+    Use this when you need current facts, recent events, or real-world data.
+    """
+    try:
+        from duckduckgo_search import DDGS
+        results = []
+        with DDGS() as ddgs:
+            for r in ddgs.text(query, max_results=5):
+                results.append(f"**{r['title']}**\n{r['body']}\nSource: {r['href']}")
+        if results:
+            return "\n\n---\n\n".join(results)
+        return "No results found for this query."
+    except Exception as e:
+        return f"Web search failed: {str(e)}. Falling back to internal knowledge."
+
+
 # ─────────────────────────────────────────
 # TOOL 1: Knowledge Retriever
 # ─────────────────────────────────────────
@@ -19,8 +42,6 @@ def retrieve_knowledge(query: str) -> str:
     Retrieve relevant information from the knowledge base
     for any technical or placement-related topic.
     """
-    # For now: LLM answers from training data
-    # In production: replace with ChromaDB retrieval
     response = llm.invoke(
         f"You are a placement preparation expert. "
         f"Answer this specifically: {query}"
@@ -108,6 +129,7 @@ def summarize_content(content: str) -> str:
 # TOOL REGISTRY
 # ─────────────────────────────────────────
 ALL_TOOLS = [
+    web_search,
     retrieve_knowledge,
     explain_concept,
     compare_concepts,

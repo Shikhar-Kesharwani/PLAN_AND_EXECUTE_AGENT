@@ -8,3 +8,5 @@ python-dotenv
 pydantic
 fastapi
 uvicorn
+duckduckgo-search
+httpx

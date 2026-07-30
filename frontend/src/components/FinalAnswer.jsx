@@ -1,16 +1,48 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Copy, Check, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
+import { Copy, Check, ChevronDown, ChevronUp, Sparkles, Download } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-export default function FinalAnswer({ answer, steps, confidence }) {
-  const [copied,    setCopied]    = useState(false);
-  const [expanded,  setExpanded]  = useState(true);
+export default function FinalAnswer({ answer, steps, confidence, query, stepResults }) {
+  const [copied,   setCopied]   = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(answer);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // ── Export as Markdown file ─────────────────────────
+  const handleExport = () => {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+
+    let md = `# Plan-and-Execute Report\n`;
+    md += `**Query:** ${query || "N/A"}\n`;
+    md += `**Generated:** ${new Date().toLocaleString()}\n`;
+    md += `**Steps Executed:** ${steps}\n`;
+    md += `**Confidence:** ${Math.round(confidence * 100)}%\n\n`;
+    md += `---\n\n`;
+
+    if (stepResults && stepResults.length > 0) {
+      md += `## Execution Steps\n\n`;
+      stepResults.forEach((r, i) => {
+        md += `### Step ${i + 1}: ${r.description || ""}\n`;
+        if (r.tool) md += `**Tool used:** \`${r.tool}\`\n\n`;
+        md += `${r.result || ""}\n\n`;
+        md += `---\n\n`;
+      });
+    }
+
+    md += `## Final Answer\n\n${answer}\n`;
+
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `plan-execute-report-${timestamp}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   if (!answer) return null;
@@ -23,15 +55,14 @@ export default function FinalAnswer({ answer, steps, confidence }) {
       className="relative"
     >
       {/* Glow behind card */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10
                       to-pink-600/10 rounded-2xl blur-xl" />
 
       {/* Card */}
       <div className="relative holo-card rounded-2xl overflow-hidden">
 
         {/* Header */}
-        <div className="flex items-center justify-between p-5 
-                        border-b border-white/5">
+        <div className="flex items-center justify-between p-5 border-b border-white/5">
           <div className="flex items-center gap-3">
             {/* Animated sparkle */}
             <motion.div
@@ -56,12 +87,25 @@ export default function FinalAnswer({ answer, steps, confidence }) {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Export as Markdown */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={handleExport}
+              title="Export as Markdown"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 glass rounded-lg
+                         border border-white/10 hover:border-green-500/50 transition-all"
+            >
+              <Download size={14} className="text-green-400" />
+              <span className="text-xs text-green-400 font-mono hidden sm:block">Export .md</span>
+            </motion.button>
+
             {/* Copy button */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleCopy}
-              className="p-2 glass rounded-lg border border-white/10 
+              className="p-2 glass rounded-lg border border-white/10
                          hover:border-purple-500/50 transition-all"
             >
               {copied
@@ -75,11 +119,11 @@ export default function FinalAnswer({ answer, steps, confidence }) {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setExpanded(!expanded)}
-              className="p-2 glass rounded-lg border border-white/10 
+              className="p-2 glass rounded-lg border border-white/10
                          hover:border-purple-500/50 transition-all"
             >
               {expanded
-                ? <ChevronUp size={16} className="text-gray-400" />
+                ? <ChevronUp   size={16} className="text-gray-400" />
                 : <ChevronDown size={16} className="text-gray-400" />
               }
             </motion.button>

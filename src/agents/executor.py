@@ -35,7 +35,10 @@ class ExecutorAgent:
 
         # Build tool input based on tool type
         try:
-            if tool_name == "retrieve_knowledge":
+            if tool_name == "web_search":
+                result = tool.invoke({"query": step_description})
+
+            elif tool_name == "retrieve_knowledge":
                 result = tool.invoke({"query": step_description})
 
             elif tool_name == "explain_concept":

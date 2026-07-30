@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import sys
 import os
@@ -24,6 +25,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ─────────────────────────────────────────
+# Serve React static files (Docker mode)
+# ─────────────────────────────────────────
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+if os.path.isdir(STATIC_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_DIR, "assets")), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_frontend(full_path: str = ""):
+        # API routes are handled before this catch-all
+        index = os.path.join(STATIC_DIR, "index.html")
+        if os.path.exists(index):
+            return FileResponse(index)
+        return {"error": "Frontend not built. Run npm run build in /frontend."}
+
 
 # ─────────────────────────────────────────
 # In-memory session history store

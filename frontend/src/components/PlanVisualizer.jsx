@@ -10,11 +10,12 @@ const STATUS_CONFIG = {
 };
 
 const TOOL_COLORS = {
-  retrieve_knowledge:       { color: "#8b5cf6", label: "🔍 Retriever" },
-  explain_concept:          { color: "#06b6d4", label: "💡 Explainer" },
-  compare_concepts:         { color: "#ec4899", label: "⚖️ Comparator" },
+  web_search:                { color: "#f59e0b", label: "🌐 Web Search" },
+  retrieve_knowledge:        { color: "#8b5cf6", label: "🔍 Retriever" },
+  explain_concept:           { color: "#06b6d4", label: "💡 Explainer" },
+  compare_concepts:          { color: "#ec4899", label: "⚖️ Comparator" },
   generate_practice_problems:{ color: "#f97316", label: "🎯 Practice" },
-  summarize_content:        { color: "#10b981", label: "📝 Summarizer" },
+  summarize_content:         { color: "#10b981", label: "📝 Summarizer" },
 };
 
 function StepNode({ step, index, isActive, result }) {

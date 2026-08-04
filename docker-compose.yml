@@ -1,26 +1,4 @@
-version: "3.9"
-
+﻿version: '3.8'
 services:
-  # ──────────────────────────────────────────
-  # Backend + Frontend (single Docker container)
-  # ──────────────────────────────────────────
-  agent:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # In prod, point this to your real backend URL (same container = same origin)
-        VITE_API_URL: ""
-    container_name: plan-execute-agent
-    ports:
-      - "8000:8000"
-    environment:
-      - GROQ_API_KEY=${GROQ_API_KEY}
-      - LLM_MODEL=${LLM_MODEL:-llama3-70b-8192}
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+  api:
+    build: .
